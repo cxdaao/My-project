@@ -413,6 +413,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &905491093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}
+  m_PrefabInstance: {fileID: 1690376893}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &905491094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905491093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45759ded5cbcce84f9821f802e583f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SingleTexture: {fileID: 2800000, guid: 765280b52ca0c2b49a62f65e0a6a261b, type: 3}
+  SplitScreen: 3
+  texes: []
 --- !u!1 &921127136
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,7 +732,7 @@ PrefabInstance:
     - target: {fileID: -1634901717282715605, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 33f878b6e55f95d4e9d4323f1ef2762a, type: 2}
+      objectReference: {fileID: 2100000, guid: a42cd6e1c05011a4f9167dc5702151bf, type: 2}
     - target: {fileID: 919132149155446097, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}
       propertyPath: m_Name
       value: screen3
@@ -720,11 +740,11 @@ PrefabInstance:
     - target: {fileID: 4625062493837557154, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 33f878b6e55f95d4e9d4323f1ef2762a, type: 2}
+      objectReference: {fileID: 2100000, guid: 74053112d43b1cc41ae362ddcea22f3a, type: 2}
     - target: {fileID: 6514335277548776967, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 33f878b6e55f95d4e9d4323f1ef2762a, type: 2}
+      objectReference: {fileID: 2100000, guid: 8da1873a39303b34f8523d718bdda5f9, type: 2}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e1454a9f048889e49a05b922c0beaacf, type: 3}

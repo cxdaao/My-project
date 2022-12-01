@@ -30,10 +30,20 @@ public class SplitUVTexture : MonoBehaviour
                 for (int h = 0; h < _SingleTextureHeight; h++)
                 {
                     Color tmp = SingleTexture.GetPixel(_SingleTextureWidth / SplitScreen * i + w, h);
-                    Debug.Log(tmp);
                     texes[i].SetPixel(w, h, tmp);
                 }
             }
+        }
+
+        for (int i = 0; i < SplitScreen; i++)
+        {
+            byte[] bytes;
+            bytes = texes[i].EncodeToPNG();
+            string screenshotFileName =  "/splitImages/S_" + System.DateTime.Now.ToString("_yyyy-MM-dd-hh-mm-ss") + "_split"
+                                        + i.ToString() + ".png";
+
+            System.IO.File.WriteAllBytes(Application.dataPath + screenshotFileName, bytes);
+            Debug.Log("PNG saved to " + Application.dataPath + screenshotFileName);
         }
     }
 
