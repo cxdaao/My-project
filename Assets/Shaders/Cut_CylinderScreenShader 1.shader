@@ -64,7 +64,7 @@ Shader "Unlit/cut3_CylinderScreenShader"
                 float theta = 0;
                 float z = 0;
                 
-                if(o.PosLS.g <= -sqrt(2)/2)
+                if(o.PosLS.g <= -sqrt(2.0)/2.0)
                 {//取左边
                     //取theta的百分比
                     float pre = acos(dot(LS, float3(StartScreenDirLeft, 0))) / SplitAngle;
@@ -78,7 +78,7 @@ Shader "Unlit/cut3_CylinderScreenShader"
                         theta = (0.5 - 0.5 * pre) / 3.0;
                     }
                 }
-                else if(o.PosLS.g >= sqrt(2)/2)
+                else if(o.PosLS.g >= sqrt(2.0)/2.0)
                 {//取右边
                     float pre = acos(dot(LS, float3(StartScreenDirRight, 0))) / SplitAngle;
                     if(o.PosLS.r >= 0)

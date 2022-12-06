@@ -37,10 +37,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EndOfScreenAngle: 100
+    - _EndOfScreenAngle: 51.9
     - _EndOfSplitAngle: 0.81
-    - _ScreenHeight: 1
-    - _SplitAngle: 24.5
+    - _ScreenHeight: 2
+    - _SplitAngle: 45.1
     - _SplitScreen: 3
     m_Colors:
     - _EndOfScreen: {r: -1, g: 1, b: 0, a: 0}
