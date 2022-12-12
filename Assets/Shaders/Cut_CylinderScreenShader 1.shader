@@ -6,7 +6,7 @@ Shader "Unlit/cut3_CylinderScreenShader"
         _MainTex ("Texture", 2D) = "white" {}
         _EndOfScreenAngle("ScreenAngle", Range(0.1, 180)) = 90
         _SplitAngle("SplitAngle", Range(0.1,180)) = 30
-        //_SplitScreen("SplitScreen", Int) = 3
+        _SplitNum("SplitNum", Int) = 3
     }
     SubShader
     {
@@ -42,76 +42,62 @@ Shader "Unlit/cut3_CylinderScreenShader"
             float _ScreenHeight;
             float _EndOfScreenAngle;
             float _SplitAngle;
-            int _SplitScreen;
+            int _SplitNum;
             
             v2f vert (appdata v)
             {
                 v2f o;
                 o.PosLS = v.vertex;
-                
-                float3 LS = normalize(float3(o.PosLS.r,o.PosLS.g,0));
-                
-                float rad = _EndOfScreenAngle * UNITY_PI / 180.0;
-                float2 EndScreenDir = float2(cos(rad), sin(rad));
+
+                //local position
+                float3 LP = normalize(float3(o.PosLS.r,o.PosLS.g,0));
+
+                //每一份屏幕的宽度
                 float SplitAngle = _SplitAngle * UNITY_PI / 180.0;
 
-                
+                //屏幕总宽度
+                float rad = _EndOfScreenAngle * UNITY_PI / 180.0;
+                float2 EndScreenRightDir = float2(cos(rad), sin(rad));
+                float2 EndScreenLeftDir = float2(cos(rad), -sin(rad));
                 float2 StartScreenDir = float2(1, 0);
-                float2 StartScreenDirLeft = float2(0, -1);
-                float2 StartScreenDirRight = float2(0, 1);
-                //从屏幕中心到两边的角度
-                float TotalAngle = 2 * acos(dot(StartScreenDir, EndScreenDir));
+                //从屏幕反向中心到两边的角度
+                float TotalAngle = 2 * acos(dot(StartScreenDir, EndScreenRightDir));
+
+                //uv采样 theta & z -> [0,1]
                 float theta = 0;
                 float z = 0;
-                
-                if(o.PosLS.g <= -sqrt(2.0)/2.0)
-                {//取左边
-                    //取theta的百分比
-                    float pre = acos(dot(LS, float3(StartScreenDirLeft, 0))) / SplitAngle;
-                    if(o.PosLS.r >= 0)
-                    {
-                        //只有右边会超过1，超出部分删除（在frag阶段，这里置2.0）
-                        theta = (0.5 + 0.5 * pre) >= 1.0 ? 2.0 : (0.0 / 3.0 + (0.5 + 0.5 * pre) / 3.0);
-                    }
-                    else
-                    {
-                        theta = (0.5 - 0.5 * pre) / 3.0;
-                    }
-                }
-                else if(o.PosLS.g >= sqrt(2.0)/2.0)
-                {//取右边
-                    float pre = acos(dot(LS, float3(StartScreenDirRight, 0))) / SplitAngle;
-                    if(o.PosLS.r >= 0)
-                    {
-                        //只有左边会小于1，超出部分删除（在frag阶段，这里置2.0）
-                        theta = (0.5 - 0.5 * pre) <= 0.0 ? 2.0 : (2.0 / 3.0 + (0.5 - 0.5 * pre) / 3.0);
-                    }
-                    else
-                    {
-                        theta = 2.0 / 3.0 + (0.5 + 0.5 * pre) / 3.0;
-                    }
-                }
-                else{
-                    //中间
-                    float pre = acos(dot(LS, float3(StartScreenDir, 0))) / SplitAngle;
-                    //左右超出部分删除
-                    if(o.PosLS.g >= 0)
-                    {
-                        theta =  (0.5 + 0.5 * pre) >= 1.0 ? 2.0 : (1.0 / 3.0 +  (0.5 + 0.5 * pre) / 3.0);
-                    }
-                    else
-                    {
-                        theta = (0.5 - 0.5 * pre) <= 0.0 ? 2.0 : (1.0 / 3.0 + (0.5 - 0.5 * pre) / 3.0);
-                    }  
-                }
-                
+                //又因为是圆柱，z采样不变
                 z = (o.PosLS.b  + _ScreenHeight/2.f) / _ScreenHeight;
 
+                //-------------------theta------------------------------//
+                float EachSplitAngle = TotalAngle / float(_SplitNum);
+                float2 CenterLineArray[100];
+
+                for(int i = 0; i < _SplitNum; i++)
+                {
+                    //新中心与左边缘夹角
+                    float belta = EachSplitAngle * i + EachSplitAngle / 2.0;
+                    CenterLineArray[i] = float2(cos(rad - belta), -1 * sin(rad - belta));
+                }
+                //遍历中心线，求点是否在靠近中心线
+                for(int i = 0; i < _SplitNum; i++)
+                {
+                    float tmpCos = dot(float2(LP.x, LP.y), CenterLineArray[i]);
+                    if(tmpCos < cos(SplitAngle))
+                    {
+                            
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                //-------------------theta end--------------------------//
+                //向下传递参数
                 o.uv = float2(theta, z);
                 o.PosCS = UnityObjectToClipPos(v.vertex);
                 o.WorldNormal = UnityObjectToWorldNormal(v.normal.xyz);
                 o.PosWS = mul(unity_ObjectToWorld, v.vertex);
-                
                 return o;
             }
 
