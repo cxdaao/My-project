@@ -52,7 +52,7 @@ Shader "Unlit/cut3_CylinderScreenShader"
                 //local position
                 float3 LP = normalize(float3(o.PosLS.r,o.PosLS.g,0));
 
-                //每一份屏幕的宽度
+                //每一份屏幕的宽度弧度
                 float SplitAngle = _SplitAngle * UNITY_PI / 180.0;
 
                 //屏幕总宽度
@@ -72,25 +72,37 @@ Shader "Unlit/cut3_CylinderScreenShader"
                 //-------------------theta------------------------------//
                 float EachSplitAngle = TotalAngle / float(_SplitNum);
                 float2 CenterLineArray[100];
+                float2 CenterLineStart[100];
 
                 for(int i = 0; i < _SplitNum; i++)
                 {
-                    //新中心与左边缘夹角
+                    //新中心与最左边缘夹角
                     float belta = EachSplitAngle * i + EachSplitAngle / 2.0;
                     CenterLineArray[i] = float2(cos(rad - belta), -1 * sin(rad - belta));
+                    //todo：还需要计算每一个中心线的起始uv计算位置
+                    //还需要一个中心线与他的左边线的夹脚
+                    //gama的角度是每一个中心线左边的边线的角度到最左边缘的夹脚
+                    float gama = belta - SplitAngle / 2.0;
+                    CenterLineStart[i] = float2(cos(rad - gama), -1 * sin(rad - gama));
                 }
                 //遍历中心线，求点是否在靠近中心线
                 for(int i = 0; i < _SplitNum; i++)
                 {
+                    //判断现在这个vertex与每一个中心线的cos
                     float tmpCos = dot(float2(LP.x, LP.y), CenterLineArray[i]);
+                    //与设定的阈值相比较
                     if(tmpCos < cos(SplitAngle))
                     {
-                            
+                        //todo：判断与中心靠近之后，从uv起始计算位置开始计算uv
+                        //可以在这一起算，也可以在前面先记录之后这里直接用
+                        theta = float(i / _SplitNum) + acos(dot(LP, float3(CenterLineStart[i], 0))) / (2 * SplitAngle) / _SplitNum;
+                        break;
                     }
                     else
                     {
-                        
+                        theta = -1.0f;    
                     }
+
                 }
                 //-------------------theta end--------------------------//
                 //向下传递参数
